@@ -1,0 +1,65 @@
+%run genome_functions.ipynb
+soup = BeautifulSoup(uniprot_content, 'html.parser')
+
+# === Batch Processing from File ===
+
+# Path to your input file containing KEGG pathway links
+input_file = "kegg_links.txt"  # <-- Change this if your file has a different name
+
+# Open the input file and process each link line-by-line
+with open(input_file, "r", encoding="utf-8") as infile:
+    for line in infile:
+        url = line.strip()
+        if not url:
+            continue  # skip blank lines
+
+        print(f"Processing: {url}")
+        uniprot_content = load_webpage(url)
+        if not uniprot_content:
+            print(f"Failed to load {url}")
+            continue
+
+        # === Get output filename based on KEGG pathway title ===
+        pathway_name = extract_kegg_pathway_name(uniprot_content)
+        safe_filename = re.sub(r'[^\w\s-]', '', pathway_name).strip().replace(' ', '_') + ".txt"
+
+        # === Extract mmu entries ===
+        results = extract_mmu_entries(uniprot_content)
+        seen_uniprot_ids = set()
+
+        # === Write results to file ===
+        with open(safe_filename, "w", encoding="utf-8") as f:
+            f.write("UniProt_ID\tSubcellular_Location(s)\n")
+
+            for text in results:
+                mmu_url = "https://www.kegg.jp" + text
+                mmu_content = load_webpage(mmu_url)
+                if not mmu_content:
+                    continue
+
+                uniprot_results = extract_uniprot(mmu_content)
+
+                for result in uniprot_results:
+                    uniprot_id = result[1]
+                    if uniprot_id in seen_uniprot_ids:
+                        continue
+                    seen_uniprot_ids.add(uniprot_id)
+
+                    uniprot_status = get_uniprot_entry_status(uniprot_id)
+
+                    if uniprot_status == "unreviewed":
+                        continue
+
+                    if isinstance(uniprot_status, list):
+                        if uniprot_status:
+                            shortened_locations = [convert_text(loc) for loc in uniprot_status]
+                            location_str = "; ".join(shortened_locations)
+                        else:
+                            location_str = f"https://www.uniprot.org/uniprot/{uniprot_id}"
+                    else:
+                        continue  # Skip if unexpected error
+
+                    f.write(f"{uniprot_id}\t{location_str}\n")
+
+        print(f"Saved: {safe_filename}\n")
+
