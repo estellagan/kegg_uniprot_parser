@@ -17,8 +17,8 @@ A KEGG-to-UniProt annotation pipeline in Python code that processes multiple mou
 ---
 
 ## Example Input File (kegg_links.txt)
-  https://www.kegg.jp/pathway/mmu00290
-  https://www.kegg.jp/pathway/mmu00300
+https://www.kegg.jp/pathway/mmu00290  
+https://www.kegg.jp/pathway/mmu00300  
 
 ## Example Output File
 ### **File 1**  
