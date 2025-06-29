@@ -4,6 +4,7 @@ A KEGG-to-UniProt annotation pipeline in Python code that processes multiple mou
 ---
 
 ## Features
+- Reads multiple KEGG pathway URLs line-by-line from a user-provided `.txt` file (`kegg_links.txt`)  
 - Parses KEGG pathway maps for `mmu` (mouse) gene entries
 - Extracts corresponding relevant **UniProt protein IDs**
 - Queries the **UniProt REST API** for:
