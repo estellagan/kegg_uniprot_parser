@@ -23,15 +23,14 @@ A KEGG-to-UniProt annotation pipeline in Python code that processes multiple mou
 ## Example Output File
 **File 1**
   **Valine_leucine_and_isoleucine_biosynthesis.txt**
-  
-  UniProt_ID	Subcellular_Location(s)
-  Q8VBT2	Cy
-  Q8R238	https://www.uniprot.org/uniprot/Q8R238
-  P24288	Cy
-  O35855	Mi
+UniProt_ID	Subcellular_Location(s)
+Q8VBT2	Cy
+Q8R238	https://www.uniprot.org/uniprot/Q8R238
+P24288	Cy
+O35855	Mi
 
 **File 2**
   **Lysine_biosynthesis.txt**
-  
-  UniProt_ID	Subcellular_Location(s)
-  Q9WVM8	Mi
+
+UniProt_ID	Subcellular_Location(s)
+Q9WVM8	Mi
